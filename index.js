@@ -235,7 +235,7 @@ export class BitMapColorPicker extends React.Component {
             let pickerY = parseInt(y - this._pageY, 10);
             pickerY = pickerY > this.state.pickerHeight ? this.state.pickerHeight - 1 : pickerY;
             pickerY = pickerY < 0 ? 0 : pickerY;
-            this._onColorChange({
+            this._onColorChangeComplete({
                 pickerX,
                 pickerY,
             }, resType);
