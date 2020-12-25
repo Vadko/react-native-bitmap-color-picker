@@ -35,6 +35,9 @@ export default class SliderColorPickerExample extends React.Component {
     }
 
     changeColor = (colorRgb, resType) => resType === 'end' && this.setState({ oldColor: colorRgb })
+    
+    changeColorComplete = (colorRgb, resType) => resType === 'end' && this.setState({ oldColor: colorRgb })
+
 
     render() {
         return (
@@ -43,6 +46,7 @@ export default class SliderColorPickerExample extends React.Component {
                     ref={view => {this.colorPicker = view;}}
                     oldColor={this.state.oldColor}
                     onColorChange={this.changeColor}
+                    onColorChangeComplete={this.changeColorComplete}
                     style={{width: 200, height: 200}}/>
             </View>
         );
