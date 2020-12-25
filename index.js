@@ -64,6 +64,7 @@ export class BitMapColorPicker extends React.Component {
         defaultColor: PropTypes.string,
         oldColor: PropTypes.string,
         onColorChange: PropTypes.func,
+        onColorChangeComplete: PropTypes.func,
         /**
          * The bitmap palette base64 string, comes from some base64 convert tool against a bmp.
          */
@@ -129,6 +130,24 @@ export class BitMapColorPicker extends React.Component {
 
         if (this.props.onColorChange) {
             this.props.onColorChange(color, resType);
+        }
+    }
+
+    _onColorChangeComplete({
+        pickerX,
+        pickerY,
+    }, resType) {
+        const bmpX = parseInt(pickerX * this.bmpPickerWidthRatio, 10);
+        const bmpY = parseInt(pickerY * this.bmpPickerHeightRatio, 10);
+        let color = this.bmp.rgbToHexString(this.bmpRgbRect[bmpY][bmpX]);
+        this.setState({
+            pickerX,
+            pickerY,
+            color,
+        });
+
+        if (this.props.onColorChangeComplete) {
+            this.props.onColorChangeComplete(color, resType);
         }
     }
 
@@ -205,10 +224,27 @@ export class BitMapColorPicker extends React.Component {
                 pickerY,
             }, resType);
         };
+        
+        const handleColorChangeComplete = ({
+            x,
+            y
+        }, evt, state, resType) => {
+            let pickerX = parseInt(x - this._pageX, 10);
+            pickerX = pickerX > this.state.pickerWidth ? this.state.pickerWidth - 1 : pickerX;
+            pickerX = pickerX < 0 ? 0 : pickerX;
+            let pickerY = parseInt(y - this._pageY, 10);
+            pickerY = pickerY > this.state.pickerHeight ? this.state.pickerHeight - 1 : pickerY;
+            pickerY = pickerY < 0 ? 0 : pickerY;
+            this._onColorChange({
+                pickerX,
+                pickerY,
+            }, resType);
+        };
+        
         this._pickerResponder = createPanResponder({
             onStart: handleColorChange,
             onMove: handleColorChange,
-            onEnd: handleColorChange,
+            onEnd: handleColorChangeComplete,
         });
     }
 
